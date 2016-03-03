@@ -30,7 +30,7 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
         "Absolute" Metric Second. The closest I can break it down: 864 milliseconds, 573 micro-
         seconds, 269 nanoseconds, 917 picoseconds, 808 femtoseconds and 200-something attoseconds.
 
-        For more on the figures see the 'Revision3.OriginalCode' file to understand how we got to here...
+        For more on the figures see the 'Revision2.OriginalCode' file to understand how we got to here...
         There is no 'Revision1.OriginalCode' file because it was a simple 864ms counter, not worth "saving." 
 
         I hope you'll appreciate the care given to this project and please do contribute to it!
