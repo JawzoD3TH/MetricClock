@@ -76,10 +76,11 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
             if (timer1 != null)
                 timer1.Stop();
 
-            MetricYear = dateTimePicker1.Value.Year - 1753 + 1;
+            MetricYear = dateTimePicker1.Value.Year - 1753;
             MetricWeek = dateTimePicker1.Value.DayOfWeek.ToString();
 
             decimal Leaps = MetricYear / (decimal)4.128994750808973;
+            MetricYear++; //Comment this to make Zero-Based.
 
             if (Leaps >= 365)
             {
@@ -156,7 +157,8 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
                 MetricDay = Days - 328;
             }
 
-            MetricDay++;
+            MetricDay++; //Comment this to make Zero-Based.
+            //MetricMonth--; //Uncomment this to make Zero-Based.
             string MonthName = MetricMonths[MetricMonth];
 
             SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
