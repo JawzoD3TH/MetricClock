@@ -1,0 +1,175 @@
+﻿using System;
+using System.Windows.Forms;
+
+namespace MetricClock // Revision 2.1 2016-Mar-1
+{
+/*
+	(A new concept but an old idea, A Metric Calendar Year.)
+    MetricClock : A Metric Time-Keeping Device.
+    Copyright (C) 2016 Jawid Hassim
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+        */
+    public partial class Form1 : Form
+    {
+        static int MetricSecond = 0;
+        static int MetricMinute = 0;
+        static int MetricHour = 0;
+        static int MetricDay = 0;
+        static int MetricWeek = 0;
+        static int MetricMonth = 0;
+        static int MetricYear = 0;
+
+        // It occurrs to me that at some point the following numbers might be too "big" and cause an overflow:
+        static long MinCounter = 86457; //86457.32699178082
+        static long HorCounter = 8645733; //8645732.699178082
+        static long DayCounter = 86457327; //86457326.99178082
+        static long YerCounter = 31556924352; //31556924.352
+        static long WekCounter = 605201289; //605201288.9424657 7 Day Typical Week.
+
+        /*
+        As for months, there are 10 months instead of 12 with a caveat...
+        The 1st,3rd,5th,7th,9th months are 36 days.
+        The 2nd,4th,6th,8th,10th months are 37 days.
+
+        These months are:
+        0 - Pascal
+        1 - Archimedes
+        2 - Ramanujan
+        3 - Agnesi
+        4 - Khwarizmi
+        5 - Einstein
+        6 - Pythagoras
+        7 - Fibonacci
+        8 - Leibniz
+        9 - Jazari
+
+        Relax.
+        :P   These are just recommendations, also whether zero-based or 1, I personally
+             tend towards the former, it's The Metric System we're talking about after all.
+        */
+
+        static bool Mon36Counter = true;
+        static long Mon36 = 3112463772;
+        static long Mon37 = 3198921099;
+        
+        //788923109; //788923.1088 9.125 day week, just an idea.
+        //3155692435; //3155692.4352 10 month "Metric Month," just an idea.
+
+        static long MetricTotal = 0; //Don't trust this one! For display purposes ONLY!
+
+        static long RoundedMilli = 865;
+        static long UnwindPoint = 75;
+
+        /*
+        This is a hack around, every 75 cycles it unwinds 32 Rounded-Milliseconds, painfully
+        searched for the earliest and "neatest" looking iteration count at which to subtract
+        extra "time" and sync up the Total time with Metric Seconds.
+        */
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private Timer timer1;
+        public void InitTimer()
+        {
+            timer1 = new Timer();
+            timer1.Tick += new EventHandler(timer1_Tick);
+            timer1.Interval = 864; // 864, not 865 (We can't get more time from thin air)
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            MetricTotal++;
+            MetricSecond++;
+            Tot.Text = MetricTotal.ToString();
+            Sec.Text = MetricSecond.ToString();
+
+            if (RoundedMilli / MinCounter == 1)
+            {
+                MinCounter += 86457;
+                MetricSecond = 0;
+                Sec.Text = "0";
+                MetricMinute++;
+                Min.Text = MetricMinute.ToString();
+            }
+
+            if (RoundedMilli / HorCounter == 1)
+            {
+                HorCounter += 8645733;
+                MetricMinute = 0;
+                Min.Text = "0";
+                MetricHour++;
+                Hor.Text = MetricHour.ToString();
+            }
+
+            if (RoundedMilli / DayCounter == 1)
+            {
+                DayCounter += 86457327;
+                MetricHour = 0;
+                Hor.Text = "0";
+                MetricDay++;
+                Day.Text = MetricDay.ToString();
+            }
+
+            if (RoundedMilli / WekCounter == 1)
+            {
+                WekCounter += 788923109;
+                Day.Text = "0";
+                MetricWeek++;
+                Wek.Text = MetricWeek.ToString();
+            }
+
+            if (RoundedMilli / Mon36 == 1 && Mon36Counter == true)
+            {
+
+                Mon36Counter = false;
+                MetricMonth++;
+                Mon.Text = MetricMonth.ToString();
+            }
+            else if (RoundedMilli / Mon37 == 1 && Mon36Counter == false)
+            {
+
+                Mon36Counter = true;
+                MetricMonth++;
+                Mon.Text = MetricMonth.ToString();
+            }
+
+            if (RoundedMilli / YerCounter == 1)
+            {
+                YerCounter += 31556924352;
+                MetricWeek = 0;
+                Wek.Text = "0";
+                MetricMonth = 0;
+                Mon.Text = "0";
+                MetricYear++;
+                Yr.Text = MetricYear.ToString();
+            }
+
+            if (MetricTotal / UnwindPoint == 1)
+            {
+                UnwindPoint += 75;
+                RoundedMilli -= 32;
+            }
+
+            RoundedMilli += 865;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button1.Enabled = false;
+            InitTimer();
+        }
+    }
+}
