@@ -17,10 +17,10 @@ namespace MetricClock // Revision 3. 2016-Mar-2
         be imperceivable for many years to come! For more on the figures see the 'Revision2.OriginalCode'
         file for how we got to here, yes mistakes were made but think of this revision as the engine.
 
-        Error margin currently sits at about 147 microseconds every 2 cycles. How we achieve that is simple
-        instead of fixing differences somewhere down the line, the first cycle is 865ms we lose 426 micro-
-        seconds, the second cycle is 864ms in which we gain 573 microseconds. thus two cycles is 1729ms and
-        we can always correct the 'extra time' by delaying 6ms (6.008133260256) every 82 cycles.
+        To deal with the error margin which sat at about 147 microseconds every 2 cycles. How we achieve that
+        was simple instead of fixing differences somewhere down the line, the first cycle is 865ms we lose 426
+        microseconds, the second cycle is 864ms in which we gain 573 microseconds. thus two cycles is 1729ms and
+        we can then choose to correct the 'extra time' by delaying 6ms (6.008133260256) every 82 cycles.
 
         Revision 4 will add features.
         */
@@ -62,15 +62,6 @@ namespace MetricClock // Revision 3. 2016-Mar-2
         static int TrueDays = 1;
 
         static long MetricTotal = 0; //Don't trust this one! It's "Shifty" ;)
-
-        /*
-        This is a hack around, every 75 cycles it sleeps for 43 Milliseconds, painfully
-        searched for the earliest and "neatest" looking iteration count at which to subtract
-        extra "time" and sync up the Total time with Metric Seconds.
-
-        As is plain to see the problem with the previous revision is that I was correcting
-        the rounding to keep the clock in-sync, this kept the clock instead of simply delaying the
-        */
 
         public Form1()
         {
