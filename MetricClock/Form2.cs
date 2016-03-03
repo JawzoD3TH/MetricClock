@@ -260,7 +260,7 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
             }
             else if (TrueDay == 37 && Mon36Counter == false)
             {
-                TrueDay = 0;
+                TrueDay = 1;
                 Mon36Counter = true;
                 MetricMonth++;
             }
