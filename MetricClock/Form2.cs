@@ -5,7 +5,7 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
 {
 
     /*
-	(A new concept but an old idea, A Metric Calendar Year.)
+	(A new concept but an old idea, A Metric Calendar Year)
     MetricClock : A Metric Time-Keeping Device.
     Copyright (C) 2016 Jawid Hassim
 
