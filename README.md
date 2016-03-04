@@ -43,5 +43,6 @@ Here's how the Metric System could help us:
 Help save humanity! Help save time for all of mankind!
 
         - If you're looking to use this code quickly in your own project, the 'Form1.cs' is the essence of it.
+          Look at the 'MetricArduinoTimer.ino' file as an example of code borrowing.
         - If you're trying to understand Metric Time, see the 'Revision2.Originalcode' file.
         - Else if you simply want to amuse yourself then 'build it' to play around with it.
