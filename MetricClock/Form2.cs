@@ -50,6 +50,7 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
         static bool Mon36Counter = true;
         static bool Milli = true;
         static int Correction = 0;
+        static string DayString;
 
         static readonly System.Collections.Generic.Dictionary<int, string> MetricMonths = new System.Collections.Generic.Dictionary<int, string>()
         {
@@ -161,17 +162,19 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
             //MetricMonth--; //Uncomment this to make Zero-Based.
             string MonthName = MetricMonths[MetricMonth];
 
+            DayString = MetricDay.ToString();
+
             SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
-            if (MetricDay == 1)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "st Of " +
+            if (DayString.EndsWith("1"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "st Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else if (MetricDay == 2)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "nd Of " +
+            else if (DayString.EndsWith("2"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "nd Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else if (MetricDay == 3)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "rd Of " +
+            else if (DayString.EndsWith("3"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "rd Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "th Of " +
+            else LDateTime.Text = MetricWeek + ", The " + MetricDay + "th Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
 
             int SecMins = DateTime.Now.Minute * 60;
@@ -248,6 +251,8 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
                 TrueDay++;
                 TrueDays++;
                 MetricDay++;
+                MetricWeek = dateTimePicker1.Value.DayOfWeek.ToString();
+                DayString = MetricDay.ToString();
 
                 SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
             }
@@ -272,17 +277,17 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
                 MetricYear++;
             }
 
-            if (MetricDay == 1)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "st Of " +
+            if (DayString.EndsWith("1"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "st Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else if (MetricDay == 2)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "nd Of " +
+            else if (DayString.EndsWith("2"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "nd Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else if (MetricDay == 3)
-                LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "rd Of " +
+            else if (DayString.EndsWith("3"))
+                LDateTime.Text = MetricWeek + ", The " + MetricDay + "rd Of " +
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
-            else LDateTime.Text = dateTimePicker1.Value.DayOfWeek.ToString() + ", The " + MetricDay + "th Of " +
-                    MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
+            else LDateTime.Text = MetricWeek + ", The " + MetricDay + "th Of " +
+                   MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
