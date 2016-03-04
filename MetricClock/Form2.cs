@@ -33,6 +33,9 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
         For more on the figures see the 'Revision2.OriginalCode' file to understand how we got to here...
         There is no 'Revision1.OriginalCode' file because it was a simple 864ms counter, not worth "saving." 
 
+        This code in essence stems from the empirical presumption ;) that a year is 365.24218 days and there
+        are 86400.000 seconds in a day, which there probably aren't.
+        
         I hope you'll appreciate the care given to this project and please do contribute to it!
         -Jawid Hassim
         */
@@ -81,16 +84,44 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
             MetricWeek = dateTimePicker1.Value.DayOfWeek.ToString();
 
             decimal Leaps = MetricYear / (decimal)4.128994750808973;
-            MetricYear++; //Comment this to make Zero-Based.
 
             if (Leaps >= 365)
             {
                 int ExtraYears = Convert.ToInt32(Leaps) / 365;
+                Leaps = Leaps - (ExtraYears * 365);
                 MetricYear += ExtraYears;
             }
 
+            int Days;
+
+            /* //This is an alternative branch of code
+            decimal LeapYears = MetricYear / 4;
+
+            if (LeapYears >= 1)
+            {
+                decimal NormalYears = MetricYear - LeapYears;
+                decimal NormalDays = NormalYears * 365;
+                decimal LeapDays = LeapYears * 366;
+                decimal TotalDays = LeapYears + NormalYears;
+                decimal TotalYears = TotalDays / 365;
+                decimal Remainder = Convert.ToInt32(TotalYears) - TotalYears;
+                Days = Convert.ToInt32(Remainder);
+                if (Remainder >= 1)
+                {
+                    decimal Reremainder = Days - Remainder;
+                    //Do something with Reremainder
+                }
+                else
+                {
+                    decimal Reremainder = Convert.ToInt32(Remainder) - Remainder;
+                    //Do something with Reremainder, REMEMBER it could be negative!
+                }
+            }
+            //End of alternative branch of code */
+
+            MetricYear++; //Comment this to make Zero-Based.
             int OneMinusMonth = dateTimePicker1.Value.Month - 1;
-            int Days = dateTimePicker1.Value.Day + Convert.ToInt32(Leaps);
+            Days = dateTimePicker1.Value.Day + Convert.ToInt32(Leaps);
 
             while (OneMinusMonth != 0)
             {
@@ -158,7 +189,7 @@ namespace MetricClock // Revision 4. 2016-Mar-3 (Final)
                 MetricDay = Days - 328;
             }
 
-            MetricDay++; //Comment this to make Zero-Based.
+            //MetricDay--; //Comment this to make Zero-Based.
             //MetricMonth--; //Uncomment this to make Zero-Based.
             string MonthName = MetricMonths[MetricMonth];
 
