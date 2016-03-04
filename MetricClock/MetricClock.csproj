@@ -95,7 +95,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Revision2.OriginalCode" />
-    <None Include="Revision3.OriginalCode" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
