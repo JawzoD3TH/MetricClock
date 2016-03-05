@@ -88,6 +88,20 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             if (MetricYear >= 4)
                 LeapYears = MetricYear / 4;
             else LeapYears = 0;
+
+            if (dateTimePicker1.Value.Year >= 1900)
+            {
+                decimal part = dateTimePicker1.Value.Year / 100;
+                int NoLeapLimit = ((int)part * 100) + 100;
+                int NoLeapStart = 1900;
+                while (NoLeapStart != NoLeapLimit)
+                {
+                    if (NoLeapStart % 400 != 0)
+                        LeapYears--;
+                    NoLeapStart += 100;
+                }
+            }
+
             decimal NormalYears = MetricYear - LeapYears;
             decimal NormalDays = NormalYears * 365;
             decimal LeapDays = LeapYears * 366;
@@ -96,7 +110,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal ExactYears = TotalPreciseDays / 365;
             MetricYear = (int)ExactYears;
 
-            decimal Working = (TotalDays - TotalPreciseDays) * 1000;
+            decimal Working = (TotalDays - TotalPreciseDays) * 10000;
             int NegDays = 0;
             int Hours = 0;
             int Minutes = 0;
@@ -131,7 +145,6 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
 
             MetricYear++; //Comment this to make Zero-Based.
             DT = dateTimePicker1.Value;
-
             DT = DT.AddMilliseconds((double)Working * -1);
             DT = DT.AddSeconds(Seconds * -1);
             DT = DT.AddMinutes(Minutes * -1);
@@ -325,6 +338,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
                 DayString = MetricDay.ToString();
 
                 SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
+                //System.Threading.Thread.Sleep(7); // Gregorian Compatibility ONLY - 1 day / 3300 years,
                 Flag = true;
             }
 
