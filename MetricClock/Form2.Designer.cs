@@ -144,11 +144,11 @@
             // 
             // LDateTime
             // 
-            this.LDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LDateTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LDateTime.Location = new System.Drawing.Point(12, 148);
             this.LDateTime.Name = "LDateTime";
             this.LDateTime.ReadOnly = true;
-            this.LDateTime.Size = new System.Drawing.Size(280, 22);
+            this.LDateTime.Size = new System.Drawing.Size(280, 21);
             this.LDateTime.TabIndex = 3;
             this.LDateTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.LDateTime.Click += new System.EventHandler(this.LDateTime_Click);
