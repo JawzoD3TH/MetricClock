@@ -110,7 +110,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal ExactYears = TotalPreciseDays / 365;
             MetricYear = (int)ExactYears;
 
-            decimal Working = (TotalDays - TotalPreciseDays) * 10000;
+            decimal Working = (TotalDays - TotalPreciseDays) * 100000;
             int NegDays = 0;
             int Hours = 0;
             int Minutes = 0;
