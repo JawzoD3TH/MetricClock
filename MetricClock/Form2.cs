@@ -34,15 +34,15 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
         There is no 'Revision1.OriginalCode' file because it was a simple 864ms counter, not worth "saving." 
 
         This code in essence stems from the empirical presumption ;) that a year is 365.24218 days and there
-        are 86400.000 seconds in a day, which there probably aren't. As a matter of fact the Gregorian Calendar
-        will go pear-shaped in 1587 years, it will need another one day adjustment but hopefully it will become
-        noticeable before that, this baby shouldn't be affected.
+        are 86400.000 seconds in a day, which there probably aren't.
         
         I hope you'll appreciate the care given to this project and please do contribute to it!
         -Jawid Hassim
         */
 
         static Timer timer1;
+        static DateTime DT;
+        static bool Flag = false;
         static string MetricWeek;
         static int MetricSecond;
         static int MetricMinute;
@@ -83,9 +83,11 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
                 timer1.Stop();
 
             MetricYear = dateTimePicker1.Value.Year - 1753;
-            MetricWeek = dateTimePicker1.Value.DayOfWeek.ToString();
+            decimal LeapYears;
 
-            decimal LeapYears = MetricYear / 4;
+            if (MetricYear >= 4)
+                LeapYears = MetricYear / 4;
+            else LeapYears = 0;
             decimal NormalYears = MetricYear - LeapYears;
             decimal NormalDays = NormalYears * 365;
             decimal LeapDays = LeapYears * 366;
@@ -94,70 +96,60 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal ExactYears = TotalPreciseDays / 365;
             MetricYear = (int)ExactYears;
 
-            decimal Working = (ExactYears - MetricYear) * 1000000000; //Multiply to millisecond.
-            Working = Working / 86400000;
+            decimal Working = (TotalDays - TotalPreciseDays) * 1000;
             int NegDays = 0;
             int Hours = 0;
             int Minutes = 0;
             int Seconds = 0;
-            if (Working >= 1)
-                NegDays = (int)Working;
-
-            Working = Working - (int)Working;
-            Working = Working * 10;
-
-            if (Working >= 1)
-                Hours = (int)Working;
-
-            if (Hours >= 24)
+            if (Working >= 86400000)
             {
-                int BackCount = Hours / 24;
-                NegDays = NegDays + BackCount;
-                Hours = Hours - (BackCount * 24);
+                decimal Daysecs = Working / 86400000; //Daysecs = Day Sections, not Dayseconds
+                NegDays = (int)Daysecs;
+                Working = Working - (NegDays * 86400000);
             }
 
-            Working = Working - (int)Working;
-            Working = Working * 100;
-
-            if (Working >= 1)
-                Minutes = (int)Working;
-
-            if (Minutes >= 100)
+            if (Working >= 3600000)
             {
-                int BackCount = Minutes / 100;
-                Hours = Hours - BackCount;
-                Minutes = Minutes - (BackCount * 24);
+                decimal Hoursecs = Working / 3600000;
+                Hours = (int)Hoursecs;
+                Working = Working - (Hours * 3600000);
             }
 
-            Working = Working - (int)Working;
-            Working = Working * 100;
-
-            if (Working >= 1)
-                Seconds = (int)Working;
-
-            if (Seconds >= 100)
+            if (Working >= 60000)
             {
-                int BackCount = Seconds / 100;
-                Minutes = Minutes - BackCount;
-                Seconds = Seconds - (BackCount * 24);
+                decimal Minsecs = Working / 60000;
+                Minutes = (int)Minsecs;
+                Working = Working - (Minutes * 60000);
             }
 
-            Working = Working - (int)Working;
-            Working = Working * 1000;
+            if (Working >= 1000)
+            {
+                decimal Secsecs = Working / 1000;
+                Seconds = (int)Secsecs;
+                Working = Working - (Seconds * 1000);
+            }
 
             MetricYear++; //Comment this to make Zero-Based.
-            dateTimePicker1.Value.AddMilliseconds((double)Working * -1);
+            DT = dateTimePicker1.Value;
 
-            int OneMinusMonth = dateTimePicker1.Value.Month - 1;
-            int Days = dateTimePicker1.Value.AddDays(NegDays * -1).Day;
+            DT = DT.AddMilliseconds((double)Working * -1);
+            DT = DT.AddSeconds(Seconds * -1);
+            DT = DT.AddMinutes(Minutes * -1);
+            DT = DT.AddHours(Hours * -1);
+            DT = DT.AddDays(NegDays * -1);
+
+            MetricWeek = DT.DayOfWeek.ToString();
+
+            int Days = DT.Day + (int)LeapYears;
+            int OneMinusMonth = DT.Month - 1;
 
             while (OneMinusMonth != 0)
             {
-                Days += DateTime.DaysInMonth(dateTimePicker1.Value.AddDays(NegDays * -1).Year, OneMinusMonth);
+                Days += DateTime.DaysInMonth(DT.Year, OneMinusMonth);
                 OneMinusMonth--;
             }
 
-            if (Days >= 365) //Not sure it will overflow but lets be sure!
+            if (Days > 365)
             {
                 int ExtraYears = Days / 365;
                 MetricYear += ExtraYears;
@@ -217,14 +209,14 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
                 MetricDay = Days - 328;
             }
 
-            //MetricDay--; //Comment this to make Zero-Based.
+            //MetricDay--; //Uncomment this to make Zero-Based.
             //MetricMonth--; //Uncomment this to make Zero-Based.
 
             SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
             DayString = MetricDay.ToString();
 
-            int SecMins = DateTime.Now.AddMinutes(Minutes * -1).Minute * 60;
-            int SecHors = (DateTime.Now.AddHours(Hours * -1).Hour * 60) * 60;
+            int SecMins = DT.Minute * 60;
+            int SecHors = (DT.Hour * 60) * 60;
             int TotalSeconds = SecHors + SecMins;
             decimal MetricSeconds = TotalSeconds * (decimal)1.156639968865873; // 1000ms / 864.5732699178082
 
@@ -236,9 +228,9 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             }
             else MetricMinute = (int)tDec;
 
-            MetricSecond += Convert.ToInt32((decimal)1.156639968865873 * DateTime.Now.AddSeconds(Seconds * -1).Second);
+            MetricSecond += Convert.ToInt32((decimal)1.156639968865873 * DT.Second);
 
-            if (DateTime.Now.Millisecond > 864)
+            if (DT.Millisecond > 864)
                 MetricSecond++;
 
             if (MetricSecond < 100)
@@ -325,32 +317,31 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
 
             if (MetricHour == 10)
             {
-                dateTimePicker1.Value = DateTime.Now.AddDays(1);
                 MetricHour = 0;
                 Hor.Value = 0;
                 TrueDay++;
                 TrueDays++;
                 MetricDay++;
-                MetricWeek = dateTimePicker1.Value.DayOfWeek.ToString();
                 DayString = MetricDay.ToString();
 
                 SDate.Text = MetricYear + "/" + MetricMonth + "/" + MetricDay + " (Y/M/D)";
+                Flag = true;
             }
 
-            if (TrueDay == 36 && Mon36Counter == true)
+            if (TrueDay > 36 && Mon36Counter == true)
             {
                 TrueDay = 1;
                 Mon36Counter = false;
                 MetricMonth++;
             }
-            else if (TrueDay == 37 && Mon36Counter == false)
+            else if (TrueDay > 37 && Mon36Counter == false)
             {
                 TrueDay = 1;
                 Mon36Counter = true;
                 MetricMonth++;
             }
 
-            if (TrueDays == 365)
+            if (TrueDays > 365)
             {
                 TrueDays = 1;
                 MetricMonth = 0;
@@ -368,11 +359,16 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
                     MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
             else LDateTime.Text = MetricWeek + ", The " + MetricDay + "th Of " +
                    MetricMonths[MetricMonth] + " " + MetricYear + " @ " + MetricHour + ":" + MetricMinute + ":" + MetricSecond;
+
+            if (Flag)
+                dateTimePicker1.Value = DateTime.Now.AddDays(1);
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            Calculate();
+            if (Flag)
+                Flag = false;
+            else Calculate();
         }
 
         private void LDateTime_Click(object sender, EventArgs e)
