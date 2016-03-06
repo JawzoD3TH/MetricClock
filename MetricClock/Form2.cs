@@ -107,6 +107,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal LeapDays = LeapYears * 366;
             decimal TotalDays = LeapDays + NormalDays;
             decimal TotalPreciseDays = TotalDays / (decimal)1.000663506849315; //MetricSeconds Multiplier
+            //decimal TotalPreciseDays = TotalDays; //Straight Seconds, accurate to a day but not a year.
             decimal ExactYears = TotalPreciseDays / 365;
             MetricYear = (int)ExactYears;
 
