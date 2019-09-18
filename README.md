@@ -39,8 +39,6 @@ Here's how the Metric System could help us:
         Relax.
         :P   These are just recommendations, also whether zero-based or 1, I personally
              tend towards the former, it's The Metric System we're talking about after all.
-        
-Help save humanity! Help save time for all of mankind!
 
         - If you're looking to use this code quickly in your own project, the 'Form1.cs' is the essence of it.
           Look at the 'MetricArduinoTimer.ino' file as an example of code borrowing.
