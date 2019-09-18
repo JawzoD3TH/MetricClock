@@ -44,3 +44,6 @@ Here's how the Metric System could help us:
           Look at the 'MetricArduinoTimer.ino' file as an example of code borrowing.
         - If you're trying to understand Metric Time, see the 'Revision2.Originalcode' file.
         - Else if you simply want to amuse yourself then 'build it' to play around with it.
+        
+Remember it doesn't change the fact that the first year will end six hours (daylight-wise) later,
+It just spreads that time over the whole year.
