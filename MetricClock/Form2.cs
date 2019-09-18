@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
@@ -91,8 +91,8 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
 
             if (dateTimePicker1.Value.Year >= 1900)
             {
-                decimal part = dateTimePicker1.Value.Year / 100;
-                int NoLeapLimit = ((int)part * 100) + 100;
+                int part = decimal.ToInt32(dateTimePicker1.Value.Year / 100);
+                int NoLeapLimit = (part * 100) + 100;
                 int NoLeapStart = 1900;
                 while (NoLeapStart != NoLeapLimit)
                 {
@@ -108,8 +108,9 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal TotalDays = LeapDays + NormalDays;
             decimal TotalPreciseDays = TotalDays / 1.000663506849315M; //MetricSeconds Multiplier
             //decimal TotalPreciseDays = TotalDays; //Straight Seconds, accurate to a day but not a year.
-            decimal ExactYears = TotalPreciseDays / 365;
-            MetricYear = (int)ExactYears;
+
+            // ExactYears 
+            MetricYear = decimal.ToInt32(TotalPreciseDays / 365); ;
 
             decimal Working = (TotalDays - TotalPreciseDays) * 100000;
             int NegDays = 0;
@@ -118,35 +119,31 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             int Seconds = 0;
             if (Working >= 86400000)
             {
-                decimal Daysecs = Working / 86400000; //Daysecs = Day Sections, not Dayseconds
-                NegDays = (int)Daysecs;
-                Working = Working - (NegDays * 86400000);
+                NegDays = decimal.ToInt32(Working / 86400000); //Daysecs = Day Sections, not Dayseconds;
+                Working -= (NegDays * 86400000);
             }
 
             if (Working >= 3600000)
             {
-                decimal Hoursecs = Working / 3600000;
-                Hours = (int)Hoursecs;
-                Working = Working - (Hours * 3600000);
+                Hours = decimal.ToInt32(Working / 3600000);
+                Working -= (Hours * 3600000);
             }
 
             if (Working >= 60000)
             {
-                decimal Minsecs = Working / 60000;
-                Minutes = (int)Minsecs;
-                Working = Working - (Minutes * 60000);
+                Minutes = decimal.ToInt32(Working / 60000);
+                Working -= (Minutes * 60000);
             }
 
             if (Working >= 1000)
             {
-                decimal Secsecs = Working / 1000;
-                Seconds = (int)Secsecs;
-                Working = Working - (Seconds * 1000);
+                Seconds = decimal.ToInt32(Working / 1000);
+                Working -= (Seconds * 1000);
             }
 
             MetricYear++; //Comment this to make Zero-Based.
             DT = dateTimePicker1.Value;
-            DT = DT.AddMilliseconds((double)Working * -1);
+            DT = DT.AddMilliseconds(decimal.ToDouble(Working) * -1);
             DT = DT.AddSeconds(Seconds * -1);
             DT = DT.AddMinutes(Minutes * -1);
             DT = DT.AddHours(Hours * -1);
@@ -154,7 +151,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
 
             MetricWeek = DT.DayOfWeek.ToString();
 
-            int Days = DT.Day + (int)LeapYears;
+            int Days = DT.Day + decimal.ToInt32(LeapYears);
             int OneMinusMonth = DT.Month - 1;
 
             while (OneMinusMonth != 0)
@@ -169,7 +166,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
                 MetricYear += ExtraYears;
 
                 ExtraYears = 365 * ExtraYears;
-                Days = Days - ExtraYears;
+                Days -= ExtraYears;
             }
 
             if (Days <= 36)
@@ -234,15 +231,15 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             int TotalSeconds = SecHors + SecMins;
             decimal MetricSeconds = TotalSeconds * 1.156639968865873M; // 1000ms / 864.5732699178082
 
-            decimal tDec = MetricSeconds / 100;
+            int tDec = decimal.ToInt32(MetricSeconds / 100);
             if (tDec > 99)
             {
-                MetricHour = (int)tDec / 100;
-                MetricMinute = (int)tDec - (MetricHour * 100);
+                MetricHour = tDec / 100;
+                MetricMinute = tDec - (MetricHour * 100);
             }
-            else MetricMinute = (int)tDec;
+            else MetricMinute = tDec;
 
-            MetricSecond += Convert.ToInt32((decimal)1.156639968865873 * DT.Second);
+            MetricSecond += decimal.ToInt32(1.156639968865873M * DT.Second);
 
             if (DT.Millisecond > 864)
                 MetricSecond++;
@@ -386,24 +383,12 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             else Calculate();
         }
 
-        private void LDateTime_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(LDateTime.Text);
-        }
+        private void LDateTime_Click(object sender, EventArgs e) => Clipboard.SetText(LDateTime.Text);
 
-        private void Hor_ValueChanged(object sender, EventArgs e)
-        {
-            MetricHour = (int)Hor.Value;
-        }
+        private void Hor_ValueChanged(object sender, EventArgs e) => MetricHour = (int)Hor.Value;
 
-        private void Min_ValueChanged(object sender, EventArgs e)
-        {
-            MetricMinute = (int)Min.Value;
-        }
+        private void Min_ValueChanged(object sender, EventArgs e) => MetricMinute = (int)Min.Value;
 
-        private void Sec_ValueChanged(object sender, EventArgs e)
-        {
-            MetricSecond = (int)Sec.Value;
-        }
+        private void Sec_ValueChanged(object sender, EventArgs e) => MetricSecond = (int)Sec.Value;
     }
 }
