@@ -106,7 +106,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             decimal NormalDays = NormalYears * 365;
             decimal LeapDays = LeapYears * 366;
             decimal TotalDays = LeapDays + NormalDays;
-            decimal TotalPreciseDays = TotalDays / (decimal)1.000663506849315; //MetricSeconds Multiplier
+            decimal TotalPreciseDays = TotalDays / 1.000663506849315M; //MetricSeconds Multiplier
             //decimal TotalPreciseDays = TotalDays; //Straight Seconds, accurate to a day but not a year.
             decimal ExactYears = TotalPreciseDays / 365;
             MetricYear = (int)ExactYears;
@@ -232,7 +232,7 @@ namespace MetricClock // Revision 5. 2016-Mar-5 (Final)
             int SecMins = DT.Minute * 60;
             int SecHors = (DT.Hour * 60) * 60;
             int TotalSeconds = SecHors + SecMins;
-            decimal MetricSeconds = TotalSeconds * (decimal)1.156639968865873; // 1000ms / 864.5732699178082
+            decimal MetricSeconds = TotalSeconds * 1.156639968865873M; // 1000ms / 864.5732699178082
 
             decimal tDec = MetricSeconds / 100;
             if (tDec > 99)
